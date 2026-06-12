@@ -1,0 +1,309 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Emulated Enums as constants at the app level
+// Role: SUPER_ADMIN, CAFE_OWNER, MANAGER, CASHIER, KITCHEN_STAFF
+// OrderType: DINE_IN, TAKEAWAY, DELIVERY, QR_ORDER
+// OrderStatus: PENDING, PREPARING, READY, COMPLETED, CANCELLED
+// PaymentStatus: PENDING, PAID, REFUNDED
+// PaymentMethod: UPI, CASH, CARD, WALLET, SPLIT
+// TableStatus: AVAILABLE, RESERVED, OCCUPIED, CLEANING
+// WasteReason: EXPIRED, SPOILED, DAMAGED, UNSOLD
+// MembershipTier: SILVER, GOLD, PLATINUM
+// CampaignChannel: WHATSAPP, SMS, EMAIL, SOCIAL
+// CampaignStatus: DRAFT, ACTIVE, COMPLETED
+// ExpenseCategory: PAYROLL, RENT, UTILITIES, INVENTORY, TAX, OTHER
+// ForecastType: SALES, TRAFFIC, INVENTORY
+// AttendanceStatus: PRESENT, ABSENT, LEAVE
+
+model Cafe {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  users     User[]
+  branches  Branch[]
+}
+
+model Branch {
+  id           String        @id @default(uuid())
+  name         String
+  address      String
+  cafeId       String
+  cafe         Cafe          @relation(fields: [cafeId], references: [id], onDelete: Cascade)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  users        User[]
+  tables       Table[]
+  ingredients  Ingredient[]
+  menuItems    MenuItem[]
+  orders       Order[]
+  wasteRecords WasteRecord[]
+  expenses     Expense[]
+  campaigns    Campaign[]
+  forecasts    Forecast[]
+  shifts       Shift[]
+  attendance   Attendance[]
+  auditLogs    AuditLog[]
+  customers    Customer[]
+  reservations Reservation[]
+}
+
+model User {
+  id           String       @id @default(uuid())
+  email        String       @unique
+  passwordHash String
+  name         String
+  role         String       // e.g., Role constants
+  cafeId       String?
+  cafe         Cafe?        @relation(fields: [cafeId], references: [id], onDelete: Cascade)
+  branchId     String?
+  branch       Branch?      @relation(fields: [branchId], references: [id], onDelete: SetNull)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  orders       Order[]
+  auditLogs    AuditLog[]
+  shifts       Shift[]
+  attendance   Attendance[]
+}
+
+model Table {
+  id           String        @id @default(uuid())
+  name         String
+  capacity     Int
+  status       String        @default("AVAILABLE") // TableStatus
+  branchId     String
+  branch       Branch        @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  orders       Order[]
+  reservations Reservation[]
+}
+
+model Reservation {
+  id            String   @id @default(uuid())
+  customerName  String
+  customerPhone String
+  dateTime      DateTime
+  partySize     Int
+  tableId       String
+  table         Table    @relation(fields: [tableId], references: [id], onDelete: Cascade)
+  branchId      String
+  branch        Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  createdAt     DateTime @default(now())
+}
+
+model Supplier {
+  id           String       @id @default(uuid())
+  name         String
+  contactName  String?
+  phone        String?
+  email        String?
+  address      String?
+  paymentTerms String?
+  ingredients  Ingredient[]
+  createdAt    DateTime     @default(now())
+}
+
+model Ingredient {
+  id             String        @id @default(uuid())
+  name           String
+  unit           String // e.g., "g", "ml", "pcs"
+  quantity       Float         @default(0)
+  minStockAlert  Float         @default(10)
+  costPerUnit    Float         @default(0)
+  expiryDate     DateTime?
+  supplierId     String?
+  supplier       Supplier?     @relation(fields: [supplierId], references: [id], onDelete: SetNull)
+  branchId       String
+  branch         Branch        @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  recipeItems    RecipeItem[]
+  wasteRecords   WasteRecord[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+model MenuItem {
+  id             String        @id @default(uuid())
+  name           String
+  category       String // e.g., "Coffee", "Bakery", "Dessert"
+  price          Float
+  imageUrl       String?
+  branchId       String
+  branch         Branch        @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  recipeItems    RecipeItem[]
+  orderItems     OrderItem[]
+  wasteRecords   WasteRecord[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+model RecipeItem {
+  id           String     @id @default(uuid())
+  menuItemId   String
+  menuItem     MenuItem   @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+  ingredientId String
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+  quantity     Float // Quantity of ingredient required
+}
+
+model Customer {
+  id             String         @id @default(uuid())
+  name           String
+  phone          String         @unique
+  email          String?
+  points         Int            @default(0)
+  cashback       Float          @default(0.0)
+  membershipTier String         @default("SILVER") // MembershipTier
+  visitCount     Int            @default(0)
+  totalSpend     Float          @default(0.0)
+  lastVisit      DateTime?
+  branchId       String
+  branch         Branch         @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  orders         Order[]
+  transactions   LoyaltyTransaction[]
+  createdAt      DateTime       @default(now())
+}
+
+model LoyaltyTransaction {
+  id            String   @id @default(uuid())
+  customerId    String
+  customer      Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  pointsDelta   Int
+  cashbackDelta Float
+  description   String
+  createdAt     DateTime @default(now())
+}
+
+model Order {
+  id            String        @id @default(uuid())
+  orderNumber   String        @unique
+  type          String        // OrderType
+  status        String        @default("PENDING") // OrderStatus
+  paymentStatus String        @default("PENDING") // PaymentStatus
+  paymentMethod String        // PaymentMethod
+  subtotal      Float
+  discount      Float         @default(0)
+  tax           Float         @default(0)
+  total         Float
+  branchId      String
+  branch        Branch        @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  tableId       String?
+  table         Table?        @relation(fields: [tableId], references: [id], onDelete: SetNull)
+  userId        String? // Cashier/Staff
+  user          User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+  customerId    String?
+  customer      Customer?     @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  items         OrderItem[]
+  splitPayments SplitPayment[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model OrderItem {
+  id         String   @id @default(uuid())
+  orderId    String
+  order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menuItemId String
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id], onDelete: Restrict)
+  quantity   Int
+  price      Float
+}
+
+model SplitPayment {
+  id        String @id @default(uuid())
+  orderId   String
+  order     Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  method    String // PaymentMethod
+  amount    Float
+  createdAt DateTime @default(now())
+}
+
+model WasteRecord {
+  id           String      @id @default(uuid())
+  ingredientId String?
+  ingredient   Ingredient? @relation(fields: [ingredientId], references: [id], onDelete: SetNull)
+  menuItemId   String?
+  menuItem     MenuItem?   @relation(fields: [menuItemId], references: [id], onDelete: SetNull)
+  quantity     Float
+  cost         Float
+  reason       String      // WasteReason
+  branchId     String
+  branch       Branch      @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  recordedAt   DateTime    @default(now())
+}
+
+model Expense {
+  id          String   @id @default(uuid())
+  category    String   // ExpenseCategory
+  amount      Float
+  date        DateTime
+  description String?
+  branchId    String
+  branch      Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+}
+
+model Campaign {
+  id           String   @id @default(uuid())
+  name         String
+  channel      String   // CampaignChannel
+  content      String
+  triggerEvent String?  // e.g., "INACTIVE_30_DAYS", "BIRTHDAY"
+  status       String   @default("DRAFT") // CampaignStatus
+  branchId     String
+  branch       Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Forecast {
+  id                String   @id @default(uuid())
+  date              DateTime
+  itemType          String   // ForecastType
+  itemId            String   // Refers to MenuItem or Ingredient
+  predictedQuantity Float
+  confidenceScore   Float
+  factors           String?  // JSON string (e.g., "{ \"weather\": \"rainy\", \"holiday\": true }")
+  branchId          String
+  branch            Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  createdAt         DateTime @default(now())
+}
+
+model Shift {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  startTime DateTime
+  endTime   DateTime
+  branchId  String
+  branch    Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+model Attendance {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date      DateTime
+  checkIn   DateTime?
+  checkOut  DateTime?
+  status    String    @default("PRESENT") // AttendanceStatus
+  branchId  String
+  branch    Branch    @relation(fields: [branchId], references: [id], onDelete: Cascade)
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action    String
+  details   String?  // JSON string
+  timestamp DateTime @default(now())
+  branchId  String?
+  branch    Branch?  @relation(fields: [branchId], references: [id], onDelete: SetNull)
+}
