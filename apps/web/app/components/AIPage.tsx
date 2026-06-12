@@ -8,6 +8,12 @@ interface AIProps {
   onUpdate: () => void;
 }
 
+interface Message {
+  role: 'ai' | 'user';
+  text: string;
+  queries: string[];
+}
+
 const SUGGESTED_QUESTIONS = [
   "Why are profits down this month?",
   "Which menu items should I remove?",
@@ -31,7 +37,7 @@ function parseMarkdown(text: string) {
 
 export default function AIPage({ recommendations, onUpdate }: AIProps) {
   const { token, selectedBranchId } = useCafeStore();
-  const [messages, setMessages] = useState([
+  const [messages, setMessages] = useState<Message[]>([
     {
       role: 'ai' as const,
       text: `### 👋 Hello! I'm your CafeOS AI Business Consultant.\n\nI have full access to your sales data, inventory, customer behavior, and staff metrics. Ask me anything about your business!\n\n**Try asking me:**`,
