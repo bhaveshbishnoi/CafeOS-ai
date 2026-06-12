@@ -22,7 +22,7 @@ interface CafeState {
   selectedBranchId: string | null;
   selectedBranchName: string | null;
   activeTab: string;
-  
+
   // POS Cart State
   cart: CartItem[];
   selectedTableId: string | null;
@@ -36,7 +36,7 @@ interface CafeState {
   logout: () => void;
   setSelectedBranch: (id: string, name: string) => void;
   setActiveTab: (tab: string) => void;
-  
+
   // Cart Actions
   addToCart: (item: { menuItemId: string; name: string; price: number }) => void;
   removeFromCart: (menuItemId: string) => void;
@@ -48,12 +48,12 @@ interface CafeState {
 }
 
 export const useCafeStore = create<CafeState>((set) => ({
-  token: typeof window !== 'undefined' ? localStorage.getItem('flowcafe_token') : null,
-  user: typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('flowcafe_user') || 'null') : null,
+  token: typeof window !== 'undefined' ? localStorage.getItem('CafeOS_token') : null,
+  user: typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('CafeOS_user') || 'null') : null,
   selectedBranchId: null,
   selectedBranchName: null,
   activeTab: 'dashboard',
-  
+
   cart: [],
   selectedTableId: null,
   selectedTableName: null,
@@ -62,8 +62,8 @@ export const useCafeStore = create<CafeState>((set) => ({
   discount: 0,
 
   setAuth: (token, user) => {
-    localStorage.setItem('flowcafe_token', token);
-    localStorage.setItem('flowcafe_user', JSON.stringify(user));
+    localStorage.setItem('CafeOS_token', token);
+    localStorage.setItem('CafeOS_user', JSON.stringify(user));
     set({
       token,
       user,
@@ -73,8 +73,8 @@ export const useCafeStore = create<CafeState>((set) => ({
   },
 
   logout: () => {
-    localStorage.removeItem('flowcafe_token');
-    localStorage.removeItem('flowcafe_user');
+    localStorage.removeItem('CafeOS_token');
+    localStorage.removeItem('CafeOS_user');
     set({
       token: null,
       user: null,

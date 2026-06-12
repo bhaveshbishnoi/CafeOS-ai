@@ -3,7 +3,7 @@ import { PrismaService } from '../../prisma.service';
 
 @Injectable()
 export class AiService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async copilotChat(branchId: string, message: string): Promise<any> {
     const query = message.toLowerCase();
@@ -37,7 +37,7 @@ export class AiService {
       const netProfit = revenue - cogs - expenseCost - wasteCost;
 
       // Check waste categories
-      const highWasteItem = waste.length > 0 ? 
+      const highWasteItem = waste.length > 0 ?
         waste.sort((a, b) => b.cost - a.cost)[0] : null;
 
       let highWasteStr = '';
@@ -207,7 +207,7 @@ export class AiService {
 
     // --- General Fallback Reply ---
     return {
-      reply: `### Welcome to FlowCafe AI Business Copilot\n\nI am connected to your branch databases and staff shift schedules. I can assist you with:\n\n- **Profit & Margins**: Ask *"Why are profits down?"*\n- **Demand Forecasting**: Ask *"How much milk should I order?"*\n- **Staff Operations**: Ask *"Which cashiers perform best?"*\n- **Menu Optimizations**: Ask *"Which items should I discontinue?"*\n\n**Quick stats for today**:\n- Database Sync: **Online**\n- Low Stock Alerts: **2 ingredients**\n- Unresolved Waste records: **1 item**`,
+      reply: `### Welcome to CafeOS AI Business Copilot\n\nI am connected to your branch databases and staff shift schedules. I can assist you with:\n\n- **Profit & Margins**: Ask *"Why are profits down?"*\n- **Demand Forecasting**: Ask *"How much milk should I order?"*\n- **Staff Operations**: Ask *"Which cashiers perform best?"*\n- **Menu Optimizations**: Ask *"Which items should I discontinue?"*\n\n**Quick stats for today**:\n- Database Sync: **Online**\n- Low Stock Alerts: **2 ingredients**\n- Unresolved Waste records: **1 item**`,
       suggestedQueries: [
         'Why are profits down this month?',
         'What should I order tomorrow?',
@@ -280,7 +280,7 @@ export class AiService {
     if (actionCode === 'INCREASE_PRICE') {
       const { menuItemId, newPrice } = payload;
       if (!menuItemId) throw new BadRequestException('Missing menuItemId');
-      
+
       const item = await this.prisma.menuItem.findUnique({ where: { id: menuItemId } });
       if (!item) throw new NotFoundException('Menu item not found');
 
@@ -303,7 +303,7 @@ export class AiService {
 
     if (actionCode === 'CREATE_CAMPAIGN') {
       const { branchId, name, channel, content } = payload;
-      
+
       const campaign = await this.prisma.campaign.create({
         data: {
           branchId,
