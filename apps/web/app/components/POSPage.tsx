@@ -226,7 +226,7 @@ export default function POSPage({ menuItems, tables, customers, onOrderPlaced }:
                   borderBottom: '1px solid var(--border-default)'
                 }}>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: '0.82rem', fontWeight: 600, truncate: true }}>{item.name}</div>
+                    <div style={{ fontSize: '0.82rem', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.name}</div>
                     <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>₹{item.price} ea.</div>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
