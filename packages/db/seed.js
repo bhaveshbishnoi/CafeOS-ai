@@ -1,8 +1,11 @@
 const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const path = require('path');
+const prisma = new PrismaClient({
+  datasources: { db: { url: `file:${path.join(__dirname, 'prisma', 'dev.db')}` } }
+});
 
-// Pre-hashed bcrypt hash for "password123"
-const PASSWORD_HASH = "$2b$10$X87lT9c45a7F4LymFfB6I.D5R/C4vFmZ.a1XoD9p6x5X6jZ2XjXFq";
+// Pre-hashed bcryptjs hash for "password123"
+const PASSWORD_HASH = "$2a$10$xR0T2woRNMzLe8Mf8nq4Uee9Lng0Md5jTgltYp00Qgt4GAR5zBWQO";
 
 async function main() {
   console.log("Starting seed process...");
