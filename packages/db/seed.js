@@ -38,7 +38,7 @@ async function main() {
   // 1. Create Cafe Chain
   const cafe = await prisma.cafe.create({
     data: {
-      name: "CafeOS Premium",
+      name: "cafeos Premium",
     }
   });
 
@@ -64,14 +64,14 @@ async function main() {
   // 3. Create Users (RBAC)
   const usersData = [
     {
-      email: "owner@CafeOS.ai",
+      email: "owner@cafeos.ai",
       passwordHash: PASSWORD_HASH,
       name: "Vikram Malhotra",
       role: "CAFE_OWNER",
       cafeId: cafe.id,
     },
     {
-      email: "manager.hsr@CafeOS.ai",
+      email: "manager.hsr@cafeos.ai",
       passwordHash: PASSWORD_HASH,
       name: "Anjali Sharma",
       role: "MANAGER",
@@ -79,7 +79,7 @@ async function main() {
       branchId: branchHSR.id,
     },
     {
-      email: "manager.indira@CafeOS.ai",
+      email: "manager.indira@cafeos.ai",
       passwordHash: PASSWORD_HASH,
       name: "Rohan Das",
       role: "MANAGER",
@@ -87,7 +87,7 @@ async function main() {
       branchId: branchIndira.id,
     },
     {
-      email: "cashier.hsr@CafeOS.ai",
+      email: "cashier.hsr@cafeos.ai",
       passwordHash: PASSWORD_HASH,
       name: "Priya Patel",
       role: "CASHIER",
@@ -95,7 +95,7 @@ async function main() {
       branchId: branchHSR.id,
     },
     {
-      email: "cashier.indira@CafeOS.ai",
+      email: "cashier.indira@cafeos.ai",
       passwordHash: PASSWORD_HASH,
       name: "Amit Sen",
       role: "CASHIER",
@@ -103,7 +103,7 @@ async function main() {
       branchId: branchIndira.id,
     },
     {
-      email: "kitchen.hsr@CafeOS.ai",
+      email: "kitchen.hsr@cafeos.ai",
       passwordHash: PASSWORD_HASH,
       name: "Chef Suresh Kumar",
       role: "KITCHEN_STAFF",
@@ -111,7 +111,7 @@ async function main() {
       branchId: branchHSR.id,
     },
     {
-      email: "kitchen.indira@CafeOS.ai",
+      email: "kitchen.indira@cafeos.ai",
       passwordHash: PASSWORD_HASH,
       name: "Chef Nina Rao",
       role: "KITCHEN_STAFF",
@@ -341,10 +341,10 @@ async function main() {
     const indiraOrderCount = Math.floor((20 + Math.random() * 20) * multiplier);
 
     // Generate orders for HSR
-    await createDailyOrders(branchHSR.id, hsrOrderCount, date, users["cashier.hsr@CafeOS.ai"].id, "hsr");
+    await createDailyOrders(branchHSR.id, hsrOrderCount, date, users["cashier.hsr@cafeos.ai"].id, "hsr");
 
     // Generate orders for Indiranagar
-    await createDailyOrders(branchIndira.id, indiraOrderCount, date, users["cashier.indira@CafeOS.ai"].id, "indira");
+    await createDailyOrders(branchIndira.id, indiraOrderCount, date, users["cashier.indira@cafeos.ai"].id, "indira");
 
     // Generate Waste (occasional waste occurrences)
     if (Math.random() < 0.3) {
@@ -467,8 +467,8 @@ async function main() {
     }
 
     // Create Staff Shifts & Attendance
-    const staffHSR = [users["cashier.hsr@CafeOS.ai"].id, users["kitchen.hsr@CafeOS.ai"].id];
-    const staffIndira = [users["cashier.indira@CafeOS.ai"].id, users["kitchen.indira@CafeOS.ai"].id];
+    const staffHSR = [users["cashier.hsr@cafeos.ai"].id, users["kitchen.hsr@cafeos.ai"].id];
+    const staffIndira = [users["cashier.indira@cafeos.ai"].id, users["kitchen.indira@cafeos.ai"].id];
 
     for (const userId of staffHSR) {
       const shiftStart = new Date(date);
@@ -510,7 +510,7 @@ async function main() {
       });
 
       // Indiranagar staff is sometimes late, Amit Sen is particularly late to test workforce dashboard
-      const delay = userId === users["cashier.indira@CafeOS.ai"].id ? Math.floor(15 + Math.random() * 30) : Math.floor(Math.random() * 10);
+      const delay = userId === users["cashier.indira@cafeos.ai"].id ? Math.floor(15 + Math.random() * 30) : Math.floor(Math.random() * 10);
       const checkIn = new Date(shiftStart);
       checkIn.setMinutes(delay);
 
@@ -544,7 +544,7 @@ async function main() {
     data: {
       name: "VIP Birthday SMS",
       channel: "SMS",
-      content: "Happy Birthday! Claim your complimentary Cold Coffee at CafeOS Premium. We can't wait to celebrate with you!",
+      content: "Happy Birthday! Claim your complimentary Cold Coffee at cafeos Premium. We can't wait to celebrate with you!",
       triggerEvent: "BIRTHDAY",
       status: "ACTIVE",
       branchId: branchHSR.id
@@ -554,7 +554,7 @@ async function main() {
   // Create Audit Logs
   await prisma.auditLog.create({
     data: {
-      userId: users["owner@CafeOS.ai"].id,
+      userId: users["owner@cafeos.ai"].id,
       action: "CAMPAIGN_CREATE",
       details: JSON.stringify({ campaignName: "Weekend Combo", channel: "WHATSAPP" }),
       branchId: branchHSR.id
@@ -563,7 +563,7 @@ async function main() {
 
   await prisma.auditLog.create({
     data: {
-      userId: users["manager.hsr@CafeOS.ai"].id,
+      userId: users["manager.hsr@cafeos.ai"].id,
       action: "PRICE_UPDATE",
       details: JSON.stringify({ menuItem: "Cold Coffee", oldPrice: 170, newPrice: 180 }),
       branchId: branchHSR.id
