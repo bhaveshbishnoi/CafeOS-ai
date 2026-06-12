@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "FlowCafe AI - Cafe Operating System",
+  title: "CafeOS AI - Cafe Operating System",
   description: "AI-Powered Cafe Operating System combining POS, Inventory, Recipe Costing, CRM, and Demand Forecasting",
 };
 

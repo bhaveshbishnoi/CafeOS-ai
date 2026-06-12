@@ -35,7 +35,7 @@ async function main() {
   // 1. Create Cafe Chain
   const cafe = await prisma.cafe.create({
     data: {
-      name: "FlowCafe Premium",
+      name: "CafeOS Premium",
     }
   });
 
@@ -61,14 +61,14 @@ async function main() {
   // 3. Create Users (RBAC)
   const usersData = [
     {
-      email: "owner@flowcafe.ai",
+      email: "owner@CafeOS.ai",
       passwordHash: PASSWORD_HASH,
       name: "Vikram Malhotra",
       role: "CAFE_OWNER",
       cafeId: cafe.id,
     },
     {
-      email: "manager.hsr@flowcafe.ai",
+      email: "manager.hsr@CafeOS.ai",
       passwordHash: PASSWORD_HASH,
       name: "Anjali Sharma",
       role: "MANAGER",
@@ -76,7 +76,7 @@ async function main() {
       branchId: branchHSR.id,
     },
     {
-      email: "manager.indira@flowcafe.ai",
+      email: "manager.indira@CafeOS.ai",
       passwordHash: PASSWORD_HASH,
       name: "Rohan Das",
       role: "MANAGER",
@@ -84,7 +84,7 @@ async function main() {
       branchId: branchIndira.id,
     },
     {
-      email: "cashier.hsr@flowcafe.ai",
+      email: "cashier.hsr@CafeOS.ai",
       passwordHash: PASSWORD_HASH,
       name: "Priya Patel",
       role: "CASHIER",
@@ -92,7 +92,7 @@ async function main() {
       branchId: branchHSR.id,
     },
     {
-      email: "cashier.indira@flowcafe.ai",
+      email: "cashier.indira@CafeOS.ai",
       passwordHash: PASSWORD_HASH,
       name: "Amit Sen",
       role: "CASHIER",
@@ -100,7 +100,7 @@ async function main() {
       branchId: branchIndira.id,
     },
     {
-      email: "kitchen.hsr@flowcafe.ai",
+      email: "kitchen.hsr@CafeOS.ai",
       passwordHash: PASSWORD_HASH,
       name: "Chef Suresh Kumar",
       role: "KITCHEN_STAFF",
@@ -108,7 +108,7 @@ async function main() {
       branchId: branchHSR.id,
     },
     {
-      email: "kitchen.indira@flowcafe.ai",
+      email: "kitchen.indira@CafeOS.ai",
       passwordHash: PASSWORD_HASH,
       name: "Chef Nina Rao",
       role: "KITCHEN_STAFF",
@@ -338,10 +338,10 @@ async function main() {
     const indiraOrderCount = Math.floor((20 + Math.random() * 20) * multiplier);
 
     // Generate orders for HSR
-    await createDailyOrders(branchHSR.id, hsrOrderCount, date, users["cashier.hsr@flowcafe.ai"].id, "hsr");
+    await createDailyOrders(branchHSR.id, hsrOrderCount, date, users["cashier.hsr@CafeOS.ai"].id, "hsr");
 
     // Generate orders for Indiranagar
-    await createDailyOrders(branchIndira.id, indiraOrderCount, date, users["cashier.indira@flowcafe.ai"].id, "indira");
+    await createDailyOrders(branchIndira.id, indiraOrderCount, date, users["cashier.indira@CafeOS.ai"].id, "indira");
 
     // Generate Waste (occasional waste occurrences)
     if (Math.random() < 0.3) {
@@ -464,8 +464,8 @@ async function main() {
     }
 
     // Create Staff Shifts & Attendance
-    const staffHSR = [users["cashier.hsr@flowcafe.ai"].id, users["kitchen.hsr@flowcafe.ai"].id];
-    const staffIndira = [users["cashier.indira@flowcafe.ai"].id, users["kitchen.indira@flowcafe.ai"].id];
+    const staffHSR = [users["cashier.hsr@CafeOS.ai"].id, users["kitchen.hsr@CafeOS.ai"].id];
+    const staffIndira = [users["cashier.indira@CafeOS.ai"].id, users["kitchen.indira@CafeOS.ai"].id];
 
     for (const userId of staffHSR) {
       const shiftStart = new Date(date);
@@ -507,7 +507,7 @@ async function main() {
       });
 
       // Indiranagar staff is sometimes late, Amit Sen is particularly late to test workforce dashboard
-      const delay = userId === users["cashier.indira@flowcafe.ai"].id ? Math.floor(15 + Math.random() * 30) : Math.floor(Math.random() * 10);
+      const delay = userId === users["cashier.indira@CafeOS.ai"].id ? Math.floor(15 + Math.random() * 30) : Math.floor(Math.random() * 10);
       const checkIn = new Date(shiftStart);
       checkIn.setMinutes(delay);
 
@@ -541,7 +541,7 @@ async function main() {
     data: {
       name: "VIP Birthday SMS",
       channel: "SMS",
-      content: "Happy Birthday! Claim your complimentary Cold Coffee at FlowCafe Premium. We can't wait to celebrate with you!",
+      content: "Happy Birthday! Claim your complimentary Cold Coffee at CafeOS Premium. We can't wait to celebrate with you!",
       triggerEvent: "BIRTHDAY",
       status: "ACTIVE",
       branchId: branchHSR.id
@@ -551,7 +551,7 @@ async function main() {
   // Create Audit Logs
   await prisma.auditLog.create({
     data: {
-      userId: users["owner@flowcafe.ai"].id,
+      userId: users["owner@CafeOS.ai"].id,
       action: "CAMPAIGN_CREATE",
       details: JSON.stringify({ campaignName: "Weekend Combo", channel: "WHATSAPP" }),
       branchId: branchHSR.id
@@ -560,7 +560,7 @@ async function main() {
 
   await prisma.auditLog.create({
     data: {
-      userId: users["manager.hsr@flowcafe.ai"].id,
+      userId: users["manager.hsr@CafeOS.ai"].id,
       action: "PRICE_UPDATE",
       details: JSON.stringify({ menuItem: "Cold Coffee", oldPrice: 170, newPrice: 180 }),
       branchId: branchHSR.id
@@ -578,7 +578,7 @@ async function main() {
 
 async function createDailyOrders(branchId, count, date, cashierId, branchName) {
   const isHSR = branchName === "hsr";
-  
+
   // Choose menu items available for this branch
   // HSR: items Cold Coffee, Espresso, Cheese Sandwich, Hot Chocolate
   const menuItems = ["Cold Coffee", "Espresso", "Cheese Sandwich", "Hot Chocolate"];
@@ -599,8 +599,8 @@ async function createDailyOrders(branchId, count, date, cashierId, branchName) {
       const itemName = menuItems[idx];
       const quantity = Math.floor(1 + Math.random() * 2); // 1-2
       const itemPrice = itemName === "Cold Coffee" ? 180 :
-                        itemName === "Espresso" ? 120 :
-                        itemName === "Cheese Sandwich" ? 150 : 200; // Hot chocolate
+        itemName === "Espresso" ? 120 :
+          itemName === "Cheese Sandwich" ? 150 : 200; // Hot chocolate
 
       orderItems.push({
         name: itemName,
@@ -630,7 +630,7 @@ async function createDailyOrders(branchId, count, date, cashierId, branchName) {
     // Get real DB menu item IDs
     // HSR Menu items map or Indira Menu items map
     const itemsDb = [];
-    
+
     // Check customer ID mapping
     let customerDbId = null;
     if (customer) {
@@ -639,7 +639,7 @@ async function createDailyOrders(branchId, count, date, cashierId, branchName) {
       });
       if (dbCust) {
         customerDbId = dbCust.id;
-        
+
         // Update customer cumulative stats
         await prisma.customer.update({
           where: { id: dbCust.id },

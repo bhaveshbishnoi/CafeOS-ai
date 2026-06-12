@@ -1,29 +1,29 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  useCafeStore, 
-  CartItem, 
-  User 
+import {
+  useCafeStore,
+  CartItem,
+  User
 } from './store';
-import { 
-  Coffee, 
-  TrendingUp, 
-  ClipboardList, 
-  Users, 
-  Bot, 
-  LogOut, 
-  Package, 
-  Percent, 
-  AlertTriangle, 
-  Calendar, 
-  DollarSign, 
-  Layers, 
-  Plus, 
-  Minus, 
-  Trash2, 
-  Sparkles, 
-  Play, 
+import {
+  Coffee,
+  TrendingUp,
+  ClipboardList,
+  Users,
+  Bot,
+  LogOut,
+  Package,
+  Percent,
+  AlertTriangle,
+  Calendar,
+  DollarSign,
+  Layers,
+  Plus,
+  Minus,
+  Trash2,
+  Sparkles,
+  Play,
   Send,
   UserCheck,
   CheckCircle2,
@@ -33,24 +33,24 @@ import {
   Settings,
   HelpCircle
 } from 'lucide-react';
-import { 
-  ResponsiveContainer, 
-  LineChart, 
-  Line, 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  Tooltip, 
-  Legend, 
-  PieChart, 
-  Pie, 
-  Cell 
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  PieChart,
+  Pie,
+  Cell
 } from 'recharts';
 
 const API_URL = 'http://localhost:5001/api';
 
-export default function FlowCafeDashboard() {
+export default function CafeOSDashboard() {
   const {
     token,
     user,
@@ -101,7 +101,7 @@ export default function FlowCafeDashboard() {
   const [chatMessages, setChatMessages] = useState<any[]>([
     {
       sender: 'ai',
-      text: '### Hello! I am your FlowCafe AI Business Consultant.\n\nAsk me anything about your profitability, inventory predictions, staff performance, or menu recommendations.',
+      text: '### Hello! I am your CafeOS AI Business Consultant.\n\nAsk me anything about your profitability, inventory predictions, staff performance, or menu recommendations.',
       queries: ['Why are profits down this month?', 'What should I order tomorrow?', 'Which staff members perform best?']
     }
   ]);
@@ -130,11 +130,11 @@ export default function FlowCafeDashboard() {
 
   // Quick credentials for easy manual evaluation
   const demoUsers = [
-    { label: 'Cafe Owner', email: 'owner@flowcafe.ai' },
-    { label: 'HSR Manager', email: 'manager.hsr@flowcafe.ai' },
-    { label: 'HSR Cashier', email: 'cashier.hsr@flowcafe.ai' },
-    { label: 'Indira Cashier', email: 'cashier.indira@flowcafe.ai' },
-    { label: 'HSR Kitchen', email: 'kitchen.hsr@flowcafe.ai' }
+    { label: 'Cafe Owner', email: 'owner@CafeOS.ai' },
+    { label: 'HSR Manager', email: 'manager.hsr@CafeOS.ai' },
+    { label: 'HSR Cashier', email: 'cashier.hsr@CafeOS.ai' },
+    { label: 'Indira Cashier', email: 'cashier.indira@CafeOS.ai' },
+    { label: 'HSR Kitchen', email: 'kitchen.hsr@CafeOS.ai' }
   ];
 
   // Ref for scroll to bottom in chat
@@ -280,8 +280,8 @@ export default function FlowCafeDashboard() {
       discount: discount,
       items: cart.map(i => ({ menuItemId: i.menuItemId, quantity: i.quantity })),
       splitPayments: checkoutPaymentMethod === 'SPLIT' ? [
-        { method: 'UPI', amount: Math.floor(cart.reduce((a,c) => a + c.price * c.quantity, 0) * 0.6) },
-        { method: 'CASH', amount: Math.ceil(cart.reduce((a,c) => a + c.price * c.quantity, 0) * 0.4) }
+        { method: 'UPI', amount: Math.floor(cart.reduce((a, c) => a + c.price * c.quantity, 0) * 0.6) },
+        { method: 'CASH', amount: Math.ceil(cart.reduce((a, c) => a + c.price * c.quantity, 0) * 0.4) }
       ] : undefined
     };
 
@@ -524,7 +524,7 @@ export default function FlowCafeDashboard() {
           </div>
 
           <h1 className="text-3xl font-extrabold text-center tracking-tight text-white mb-2 font-outfit">
-            FlowCafe <span className="text-violet-400">AI</span>
+            CafeOS <span className="text-violet-400">AI</span>
           </h1>
           <p className="text-sm text-gray-400 text-center mb-8">
             Advanced AI-Powered Operating System
@@ -540,7 +540,7 @@ export default function FlowCafeDashboard() {
                 required
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                placeholder="owner@flowcafe.ai"
+                placeholder="owner@CafeOS.ai"
                 className="w-full px-4 py-3 bg-gray-950/60 border border-gray-800 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition"
               />
             </div>
@@ -611,7 +611,7 @@ export default function FlowCafeDashboard() {
               <Coffee className="w-6 h-6 text-violet-400" />
             </div>
             <div>
-              <span className="font-bold text-lg tracking-tight font-outfit text-white">FlowCafe <span className="text-violet-400">AI</span></span>
+              <span className="font-bold text-lg tracking-tight font-outfit text-white">CafeOS <span className="text-violet-400">AI</span></span>
               <span className="block text-[10px] uppercase text-gray-500 font-semibold tracking-widest">Cafe OS v1.0</span>
             </div>
           </div>
@@ -628,7 +628,7 @@ export default function FlowCafeDashboard() {
             ].map(tab => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
-              
+
               // Hide POS/KDS depending on role boundaries in strict apps
               if (user?.role === 'KITCHEN_STAFF' && tab.id === 'pos') return null;
               if (user?.role === 'CASHIER' && tab.id === 'kds') return null;
@@ -637,13 +637,12 @@ export default function FlowCafeDashboard() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition cursor-pointer ${
-                    isActive 
-                      ? 'bg-violet-600/20 border border-violet-500/30 text-white font-semibold shadow-glow-purple' 
-                      : tab.highlight 
-                        ? 'text-violet-400 hover:bg-violet-950/20' 
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition cursor-pointer ${isActive
+                      ? 'bg-violet-600/20 border border-violet-500/30 text-white font-semibold shadow-glow-purple'
+                      : tab.highlight
+                        ? 'text-violet-400 hover:bg-violet-950/20'
                         : 'text-gray-400 hover:bg-gray-900/50 hover:text-white'
-                  }`}
+                    }`}
                 >
                   <Icon className={`w-4 h-4 ${isActive ? 'text-violet-400' : 'text-gray-400'}`} />
                   <span>{tab.label}</span>
@@ -680,7 +679,7 @@ export default function FlowCafeDashboard() {
 
       {/* 2. Main Area */}
       <div className="flex-1 flex flex-col min-w-0 bg-[#030712]/95 relative overflow-y-auto">
-        
+
         {/* Header Controls */}
         <header className="flex justify-between items-center px-8 py-4 border-b border-gray-800/40 bg-gray-950/20 backdrop-blur-md sticky top-0 z-40">
           <div className="flex items-center gap-4">
@@ -702,11 +701,10 @@ export default function FlowCafeDashboard() {
                 <button
                   key={b.id}
                   onClick={() => setSelectedBranch(b.id, b.name)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
-                    selectedBranchId === b.id 
-                      ? 'bg-violet-600/30 border border-violet-500/30 text-white font-semibold' 
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${selectedBranchId === b.id
+                      ? 'bg-violet-600/30 border border-violet-500/30 text-white font-semibold'
                       : 'text-gray-400 hover:text-white'
-                  }`}
+                    }`}
                 >
                   {b.name.split(' ')[0]} {/* Show HSR / Indiranagar */}
                 </button>
@@ -740,7 +738,7 @@ export default function FlowCafeDashboard() {
 
               {/* Graphical Layouts */}
               <div className="grid grid-cols-3 gap-6">
-                
+
                 {/* 30 Day Sales trends */}
                 <div className="col-span-2 p-6 rounded-2xl glass-panel">
                   <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-6">30-Day Sales Revenue Trend</h3>
@@ -780,7 +778,7 @@ export default function FlowCafeDashboard() {
 
               {/* Bottom Row (Branch Comparisons, Popular dishes, Expenses logger) */}
               <div className="grid grid-cols-3 gap-6">
-                
+
                 {/* Branch Leaderboard */}
                 <div className="p-6 rounded-2xl glass-panel">
                   <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-6">Multi-Branch Leaderboard</h3>
@@ -880,18 +878,17 @@ export default function FlowCafeDashboard() {
           {activeTab === 'pos' && (
             <div className="grid grid-cols-3 gap-6 items-start animate-fade-in">
               <div className="col-span-2 space-y-6">
-                
+
                 {/* Category selectors */}
                 <div className="flex gap-2 bg-gray-950/40 p-1.5 rounded-xl border border-gray-800/40 inline-flex">
                   {['All', 'Coffee', 'Bakery'].map(cat => (
                     <button
                       key={cat}
                       onClick={() => setPosCategory(cat)}
-                      className={`px-4 py-2 rounded-lg text-xs font-bold transition cursor-pointer ${
-                        posCategory === cat 
-                          ? 'bg-violet-600/30 border border-violet-500/30 text-white' 
+                      className={`px-4 py-2 rounded-lg text-xs font-bold transition cursor-pointer ${posCategory === cat
+                          ? 'bg-violet-600/30 border border-violet-500/30 text-white'
                           : 'text-gray-400 hover:text-white'
-                      }`}
+                        }`}
                     >
                       {cat}
                     </button>
@@ -940,7 +937,7 @@ export default function FlowCafeDashboard() {
               <div className="p-6 rounded-2xl glass-panel flex flex-col justify-between shadow-glow-purple h-[550px]">
                 <div>
                   <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4 border-b border-gray-800 pb-3">Checkout cart</h3>
-                  
+
                   {/* Cart Item rows */}
                   <div className="space-y-3 max-h-[200px] overflow-y-auto pr-1">
                     {cart.length === 0 ? (
@@ -1059,7 +1056,7 @@ export default function FlowCafeDashboard() {
                   <div className="space-y-1.5 text-xs text-gray-400">
                     <div className="flex justify-between">
                       <span>Subtotal</span>
-                      <span className="text-white">₹{cart.reduce((a,c) => a + c.price * c.quantity, 0)}</span>
+                      <span className="text-white">₹{cart.reduce((a, c) => a + c.price * c.quantity, 0)}</span>
                     </div>
                     {discount > 0 && (
                       <div className="flex justify-between text-emerald-400">
@@ -1069,11 +1066,11 @@ export default function FlowCafeDashboard() {
                     )}
                     <div className="flex justify-between">
                       <span>Tax (5% GST)</span>
-                      <span className="text-white">₹{Math.max(0, Math.round((cart.reduce((a,c) => a + c.price * c.quantity, 0) - discount) * 0.05))}</span>
+                      <span className="text-white">₹{Math.max(0, Math.round((cart.reduce((a, c) => a + c.price * c.quantity, 0) - discount) * 0.05))}</span>
                     </div>
                     <div className="flex justify-between text-sm font-bold text-white pt-1">
                       <span>Grand Total</span>
-                      <span className="text-violet-400 text-lg">₹{Math.max(0, cart.reduce((a,c) => a + c.price * c.quantity, 0) - discount + Math.round((cart.reduce((a,c) => a + c.price * c.quantity, 0) - discount) * 0.05))}</span>
+                      <span className="text-violet-400 text-lg">₹{Math.max(0, cart.reduce((a, c) => a + c.price * c.quantity, 0) - discount + Math.round((cart.reduce((a, c) => a + c.price * c.quantity, 0) - discount) * 0.05))}</span>
                     </div>
                   </div>
 
@@ -1098,11 +1095,10 @@ export default function FlowCafeDashboard() {
                     <button
                       key={status}
                       onClick={() => setSelectedKdsStatus(status)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
-                        selectedKdsStatus === status 
-                          ? 'bg-violet-600/30 border border-violet-500/30 text-white' 
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${selectedKdsStatus === status
+                          ? 'bg-violet-600/30 border border-violet-500/30 text-white'
                           : 'text-gray-400 hover:text-white'
-                      }`}
+                        }`}
                     >
                       {status}
                     </button>
@@ -1119,17 +1115,15 @@ export default function FlowCafeDashboard() {
                     const isOverdue = elapsedMins > 10;
 
                     return (
-                      <div key={order.id} className={`p-5 rounded-2xl glass-panel flex flex-col justify-between shadow-sm relative ${
-                        isOverdue && order.status !== 'READY' ? 'border-rose-900/50 shadow-glow-emerald bg-rose-950/5' : ''
-                      }`}>
+                      <div key={order.id} className={`p-5 rounded-2xl glass-panel flex flex-col justify-between shadow-sm relative ${isOverdue && order.status !== 'READY' ? 'border-rose-900/50 shadow-glow-emerald bg-rose-950/5' : ''
+                        }`}>
                         <div>
                           <div className="flex justify-between items-center mb-3">
                             <span className="text-[10px] font-bold text-gray-500 font-outfit">{order.orderNumber.substring(12, 22)}</span>
-                            <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase ${
-                              order.status === 'PENDING' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
-                              order.status === 'PREPARING' ? 'bg-violet-500/10 text-violet-400 border border-violet-500/20' :
-                              'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                            }`}>
+                            <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase ${order.status === 'PENDING' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
+                                order.status === 'PREPARING' ? 'bg-violet-500/10 text-violet-400 border border-violet-500/20' :
+                                  'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                              }`}>
                               {order.status}
                             </span>
                           </div>
@@ -1208,13 +1202,11 @@ export default function FlowCafeDashboard() {
                     <button
                       key={t.id}
                       onClick={() => setSelectedTable(t.id, t.name)}
-                      className={`p-6 rounded-2xl glass-panel text-left flex flex-col justify-between h-40 transition cursor-pointer relative ${
-                        isSelected ? 'border-violet-500 shadow-glow-purple bg-violet-950/10' : ''
-                      } ${
-                        t.status === 'OCCUPIED' ? 'border-amber-900/30 bg-amber-950/5' :
-                        t.status === 'CLEANING' ? 'border-rose-900/30 bg-rose-950/5 animate-pulse' :
-                        t.status === 'RESERVED' ? 'border-emerald-900/30 bg-emerald-950/5' : 'hover:border-gray-800'
-                      }`}
+                      className={`p-6 rounded-2xl glass-panel text-left flex flex-col justify-between h-40 transition cursor-pointer relative ${isSelected ? 'border-violet-500 shadow-glow-purple bg-violet-950/10' : ''
+                        } ${t.status === 'OCCUPIED' ? 'border-amber-900/30 bg-amber-950/5' :
+                          t.status === 'CLEANING' ? 'border-rose-900/30 bg-rose-950/5 animate-pulse' :
+                            t.status === 'RESERVED' ? 'border-emerald-900/30 bg-emerald-950/5' : 'hover:border-gray-800'
+                        }`}
                     >
                       <div>
                         <span className="block text-sm font-extrabold text-white leading-tight font-outfit mb-1">{t.name}</span>
@@ -1222,15 +1214,14 @@ export default function FlowCafeDashboard() {
                       </div>
 
                       <div className="flex justify-between items-end w-full">
-                        <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase ${
-                          t.status === 'AVAILABLE' ? 'bg-gray-800 text-gray-400 border border-gray-700/50' :
-                          t.status === 'RESERVED' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
-                          t.status === 'OCCUPIED' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
-                          'bg-rose-500/10 text-rose-400 border border-rose-500/20'
-                        }`}>
+                        <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase ${t.status === 'AVAILABLE' ? 'bg-gray-800 text-gray-400 border border-gray-700/50' :
+                            t.status === 'RESERVED' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
+                              t.status === 'OCCUPIED' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
+                                'bg-rose-500/10 text-rose-400 border border-rose-500/20'
+                          }`}>
                           {t.status}
                         </span>
-                        
+
                         {/* Table actions */}
                         {isSelected && (
                           <div className="flex gap-1 text-[9px] font-bold">
@@ -1295,7 +1286,7 @@ export default function FlowCafeDashboard() {
           {activeTab === 'inventory' && (
             <div className="space-y-8 animate-fade-in">
               <div className="grid grid-cols-3 gap-6 items-start">
-                
+
                 {/* Ingredients table list */}
                 <div className="col-span-2 space-y-4">
                   <h3 className="text-sm font-semibold text-white uppercase tracking-wider">Live stock quantities</h3>
@@ -1321,9 +1312,8 @@ export default function FlowCafeDashboard() {
                               <td className="px-6 py-4 text-gray-500">{ing.minStockAlert} {ing.unit}</td>
                               <td className="px-6 py-4 text-gray-300">₹{ing.costPerUnit}</td>
                               <td className="px-6 py-4">
-                                <span className={`px-2 py-0.5 rounded text-[9px] font-bold ${
-                                  isLow ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                                }`}>
+                                <span className={`px-2 py-0.5 rounded text-[9px] font-bold ${isLow ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                                  }`}>
                                   {isLow ? 'Low Stock' : 'Good'}
                                 </span>
                               </td>
@@ -1360,7 +1350,7 @@ export default function FlowCafeDashboard() {
                             <span className="block text-sm font-extrabold text-emerald-400 pt-1">{item.margin}%</span>
                           </div>
                         </div>
-                        
+
                         {/* Ingredient costs nested list */}
                         <div className="space-y-1.5 pl-1">
                           {item.ingredients.map((ing: any, idx: number) => (
@@ -1392,7 +1382,7 @@ export default function FlowCafeDashboard() {
               </div>
 
               <div className="grid grid-cols-3 gap-6 items-start">
-                
+
                 {/* Customers CRM List */}
                 <div className="col-span-2 space-y-4">
                   <h3 className="text-sm font-semibold text-white uppercase tracking-wider">Customer Loyalty Registry</h3>
@@ -1414,12 +1404,11 @@ export default function FlowCafeDashboard() {
                             <td className="px-6 py-4 font-bold text-white">{cust.name}</td>
                             <td className="px-6 py-4 text-gray-400">{cust.phone}</td>
                             <td className="px-6 py-4">
-                              <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase ${
-                                cust.segment === 'VIP' ? 'bg-violet-500/10 text-violet-400 border border-violet-500/20 shadow-glow-purple' :
-                                cust.segment === 'At Risk' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' :
-                                cust.segment === 'Inactive' ? 'bg-gray-800 text-gray-400 border border-gray-700/50' :
-                                'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                              }`}>
+                              <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase ${cust.segment === 'VIP' ? 'bg-violet-500/10 text-violet-400 border border-violet-500/20 shadow-glow-purple' :
+                                  cust.segment === 'At Risk' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' :
+                                    cust.segment === 'Inactive' ? 'bg-gray-800 text-gray-400 border border-gray-700/50' :
+                                      'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                                }`}>
                                 {cust.segment}
                               </span>
                             </td>
@@ -1462,10 +1451,10 @@ export default function FlowCafeDashboard() {
           {activeTab === 'ai' && (
             <div className="space-y-8 animate-fade-in">
               <div className="grid grid-cols-3 gap-6 items-start">
-                
+
                 {/* Copilot Chat pane */}
                 <div className="col-span-2 glass-panel rounded-2xl flex flex-col justify-between h-[550px] shadow-glow-purple border-violet-500/20">
-                  
+
                   {/* Message displays */}
                   <div className="flex-1 p-6 overflow-y-auto space-y-4">
                     {chatMessages.map((msg, idx) => (
@@ -1473,11 +1462,10 @@ export default function FlowCafeDashboard() {
                         key={idx}
                         className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
                       >
-                        <div className={`p-4 rounded-2xl text-xs max-w-[85%] leading-relaxed ${
-                          msg.sender === 'user' 
-                            ? 'bg-violet-600 text-white rounded-br-none shadow-md' 
+                        <div className={`p-4 rounded-2xl text-xs max-w-[85%] leading-relaxed ${msg.sender === 'user'
+                            ? 'bg-violet-600 text-white rounded-br-none shadow-md'
                             : 'bg-gray-950/60 border border-gray-800 text-gray-100 rounded-bl-none'
-                        }`}>
+                          }`}>
                           {/* Render simple custom markdown bullets for aesthetics */}
                           {msg.text.split('\n').map((line: string, lIdx: number) => {
                             if (line.startsWith('### ')) {
@@ -1545,7 +1533,7 @@ export default function FlowCafeDashboard() {
                   <h3 className="text-sm font-semibold text-white uppercase tracking-wider flex items-center gap-1.5">
                     <Sparkles className="w-4 h-4 text-violet-400" /> AI Growth Recommendations
                   </h3>
-                  
+
                   {aiRecommendations.map(rec => (
                     <div key={rec.id} className="p-5 rounded-2xl glass-panel relative overflow-hidden shadow-sm hover:border-violet-500/20 transition">
                       <div className="absolute top-0 right-0 px-2 py-0.5 bg-violet-600/10 text-violet-400 border-l border-b border-violet-500/15 text-[9px] font-bold uppercase tracking-wider rounded-bl-lg">
@@ -1554,7 +1542,7 @@ export default function FlowCafeDashboard() {
 
                       <span className="block text-sm font-bold text-white mb-2 font-outfit pr-10">{rec.title}</span>
                       <p className="text-xs text-gray-400 leading-relaxed mb-4">{rec.description}</p>
-                      
+
                       <div className="grid grid-cols-2 gap-2 text-[10px] font-semibold text-gray-500 mb-4 bg-gray-950/30 p-2.5 rounded-xl border border-gray-800/20">
                         <div>
                           <span>Projection</span>
@@ -1695,7 +1683,7 @@ export default function FlowCafeDashboard() {
                   rows={4}
                   value={newCampaignContent}
                   onChange={e => setNewCampaignContent(e.target.value)}
-                  placeholder="Hi [Name]! We miss you. Use code MISSYOU15 to get 15% off your next purchase at FlowCafe!"
+                  placeholder="Hi [Name]! We miss you. Use code MISSYOU15 to get 15% off your next purchase at CafeOS!"
                   className="w-full px-3 py-2 bg-gray-950 border border-gray-800 rounded-xl text-white placeholder-gray-700 focus:outline-none focus:border-violet-500 resize-none"
                 />
               </div>
